@@ -69,6 +69,7 @@ class NsynthSubset(Dataset):
     which is true only when synthesizers are not included (a different format).
     """
     def __init__(self, path_to_dataset, file_ext='.wav', transform=None):
+        print('path_to_dataset={}'.format(path_to_dataset))
         path_to_data = Path(path_to_dataset)
         file_ext = '*' + file_ext
         y = []

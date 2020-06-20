@@ -20,6 +20,7 @@ def spec_conv1d(n_layer=3, n_channel=[64, 32, 16, 8], filter_size=[1, 3, 3], str
         [] allow different activations and batch normalization functions
     """
 
+    print('n_channel={}'.format(n_channel))
     assert len(n_channel) == n_layer + 1, "This must fulfill: len(n_channel) = n_layer + 1"
     ast_msg = "The following must fulfill: len(filter_size) == len(stride) == n_layer"
     assert len(filter_size) == len(stride) == n_layer, ast_msg
@@ -118,7 +119,8 @@ class SpecVAE(BaseVAE):
         self.latent_dim = latent_dim
         self.is_featExtract = is_featExtract
 
-        self.n_freqBand, self.n_contextWin = input_size
+        print('input_size={}'.format(input_size))
+        self.n_channel, self.n_freqBand, self.n_contextWin = input_size
 
         # Construct encoder and Gaussian layers
         self.encoder = spec_conv1d(n_convLayer, [self.n_freqBand] + n_convChannel, filter_size, stride)
@@ -133,7 +135,7 @@ class SpecVAE(BaseVAE):
         self.decoder = spec_deconv1d(n_convLayer, [self.n_freqBand] + n_convChannel, filter_size, stride)
 
     def _infer_flat_size(self):
-        encoder_output = self.encoder(torch.ones(1, *self.input_size))
+        encoder_output = self.encoder(torch.ones(*self.input_size))
         return int(np.prod(encoder_output.size()[1:])), encoder_output.size()[1:]
 
     def encode(self, x):
