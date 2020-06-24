@@ -11,6 +11,7 @@ import trainer.trainer as module_trainer
 
 
 def main(config):
+
     logger = config.get_logger('train')
 
     # setup data_loader instances
